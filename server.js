@@ -21,8 +21,18 @@ app.use(express.json()); // JSON 형태의 데이터 처리
 app.use(express.static(__dirname)); // 현재 폴더의 정적 파일(html, css, js) 제공
 
 // 3. 외부 서비스(OpenAI, Supabase) 초기화
-const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
-const supabase = createClient(process.env.SUPABASE_URL, process.env.SUPABASE_ANON_KEY);
+// 환경 변수가 없을 경우 서버가 죽지 않도록 체크합니다.
+const isEnvSet = process.env.OPENAI_API_KEY && process.env.SUPABASE_URL && process.env.SUPABASE_ANON_KEY;
+
+let openai = null;
+let supabase = null;
+
+if (isEnvSet) {
+    openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
+    supabase = createClient(process.env.SUPABASE_URL, process.env.SUPABASE_ANON_KEY);
+} else {
+    console.warn('⚠️ 경고: 환경 변수가 설정되지 않았습니다. Vercel 대시보드에서 설정을 확인해 주세요.');
+}
 
 /**
  * [API] 수면 분석 요청 처리
@@ -31,6 +41,14 @@ const supabase = createClient(process.env.SUPABASE_URL, process.env.SUPABASE_ANO
 app.post('/api/analyze-sleep', async (req, res) => {
     try {
         const { text } = req.body;
+
+        // 환경 변수 설정 여부 재확인
+        if (!isEnvSet) {
+            return res.status(500).json({ 
+                success: false, 
+                message: '서버 설정(API Key)이 완료되지 않았습니다. 관리자에게 문의해 주세요.' 
+            });
+        }
 
         if (!text) {
             return res.status(400).json({ success: false, message: '텍스트가 없습니다.' });
@@ -87,9 +105,14 @@ app.post('/api/analyze-sleep', async (req, res) => {
 });
 
 // 서버 시작
-app.listen(PORT, () => {
-    console.log(`=========================================`);
-    console.log(`Sleep Insight AI 서버가 가동되었습니다!`);
-    console.log(`주소: http://localhost:${PORT}`);
-    console.log(`=========================================`);
-});
+if (process.env.NODE_ENV !== 'production') {
+    app.listen(PORT, () => {
+        console.log(`=========================================`);
+        console.log(`Sleep Insight AI 서버가 가동되었습니다!`);
+        console.log(`주소: http://localhost:${PORT}`);
+        console.log(`=========================================`);
+    });
+}
+
+// Vercel 배포를 위한 내보내기
+module.exports = app;
