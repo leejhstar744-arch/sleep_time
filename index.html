@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sleep Insight AI | 스마트한 수면 분석</title>
+    
+    <!-- 디자인 시스템 연결 -->
+    <link rel="stylesheet" href="style.css">
+    
+    <!-- 폰트 설정: Google Fonts (Inter) -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- 앱 전체 컨테이너 -->
+    <div id="app">
+        
+        <!-- 1. Hero Section: 서비스 첫 인상 -->
+        <header class="hero">
+            <h1>Sleep Insight AI</h1>
+            <p>당신의 수면 패턴과 생활 습관을 분석하여 더 나은 내일을 위한 통찰을 제공합니다.</p>
+        </header>
+
+        <!-- 2. Main Container: 핵심 콘텐츠 -->
+        <main class="container">
+            
+            <!-- 입력 카드 -->
+            <section class="input-card">
+                <label for="sleep-input" class="input-label">오늘의 수면 기록하기</label>
+                <textarea 
+                    id="sleep-input" 
+                    placeholder="예: 어제는 11시에 잤는데 자다 몇 번 깼어요. 아침에 일어나니 좀 피곤하네요."
+                    maxlength="1000"
+                ></textarea>
+                
+                <!-- 글자 수 체크 -->
+                <div class="char-count">
+                    <span id="current-char">0</span> / 1000자
+                </div>
+
+                <!-- 분석 버튼 -->
+                <button id="analyze-btn">
+                    <div class="spinner hidden" id="btn-spinner"></div>
+                    <span id="btn-text">AI 수면 분석 시작</span>
+                </button>
+            </section>
+
+        </main>
+
+        <!-- 3. Result Modal: 분석 결과 (기본 숨김) -->
+        <div id="result-modal" class="modal hidden">
+            <div class="modal-overlay"></div>
+            
+            <div class="modal-content">
+                <!-- 결과 상태 뱃지 -->
+                <div id="result-badge" class="result-badge badge-positive">긍정</div>
+                
+                <h2>수면 분석 결과</h2>
+
+                <!-- 신뢰도 게이지 -->
+                <div class="confidence-container">
+                    <p class="input-label">AI 분석 신뢰도: <span id="confidence-text">0</span>%</p>
+                    <div class="confidence-bar-bg">
+                        <div id="confidence-fill" class="confidence-bar-fill"></div>
+                    </div>
+                </div>
+
+                <!-- 분석 이유 설명 -->
+                <div class="reason-box">
+                    <p class="input-label">상세 분석 결과</p>
+                    <p id="analysis-reason">AI가 분석한 내용이 여기에 표시됩니다.</p>
+                </div>
+
+                <!-- 닫기 버튼 -->
+                <button id="close-modal-btn">확인</button>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- 스크립트 연결 -->
+    <script src="script.js"></script>
+</body>
+</html>

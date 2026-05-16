@@ -1,0 +1,275 @@
+/* 
+   Sleep Insight AI - 디자인 시스템 (Notion Style)
+   작성일: 2026-05-16
+   특징: Deep Navy Hero, Purple CTA, Pastel Card UI
+*/
+
+/* 1. 디자인 시스템 변수 정의 (전역 변수) */
+:root {
+    /* 색상 설정 */
+    --color-hero-bg: #0F172A;       /* Deep Navy: 깊은 밤의 정적인 느낌 */
+    --color-primary: #7C3AED;       /* Purple CTA: 스마트한 AI 포인트 컬러 */
+    --color-primary-hover: #6D28D9; /* 버튼 호버 시 조금 더 어두운 보라색 */
+    --color-bg-light: #F8FAFC;      /* 전체 배경: 아주 연한 그레이 */
+    --color-text-main: #1E293B;     /* 기본 텍스트: 짙은 네이비 그레이 */
+    --color-text-muted: #64748B;    /* 부드러운 텍스트: 설명 및 보조 문구 */
+    
+    /* 파스텔 카드 색상 (수면 데이터 시각화용) */
+    --color-pastel-purple: #F5F3FF;
+    --color-pastel-mint: #F0FDFA;
+    --color-pastel-blue: #EFF6FF;
+
+    /* 수치 및 여백 */
+    --radius-card: 12px;            /* 카드 둥근 모서리 */
+    --radius-btn: 8px;              /* 버튼 둥근 모서리 */
+    --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); /* 부드러운 애니메이션 효과 */
+    --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+    --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+/* 2. 기본 스타일 초기화 */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box; /* 패딩과 테두리가 전체 크기에 포함되도록 설정 */
+}
+
+body {
+    font-family: 'Inter', 'Pretendard', -apple-system, sans-serif;
+    background-color: var(--color-bg-light);
+    color: var(--color-text-main);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased; /* 폰트를 더 매끄럽게 출력 */
+}
+
+/* 3. Hero Section (헤더 영역) */
+.hero {
+    background-color: var(--color-hero-bg);
+    color: white;
+    padding: 80px 20px;
+    text-align: center;
+    background-image: radial-gradient(circle at top right, #1E293B, #0F172A); /* 은은한 그라데이션 */
+}
+
+.hero h1 {
+    font-size: 3rem;
+    font-weight: 800;
+    margin-bottom: 1rem;
+    letter-spacing: -0.02em;
+}
+
+.hero p {
+    font-size: 1.25rem;
+    opacity: 0.8;
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+/* 4. Main Container (메인 콘텐츠 영역) */
+.container {
+    max-width: 800px;
+    margin: -40px auto 40px; /* Hero 영역 위로 살짝 겹치게 배치 */
+    padding: 0 20px;
+}
+
+/* 5. Input Card (입력 카드) */
+.input-card {
+    background: white;
+    padding: 32px;
+    border-radius: var(--radius-card);
+    box-shadow: var(--shadow-md);
+    border: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.input-label {
+    display: block;
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--color-text-muted);
+    margin-bottom: 12px;
+}
+
+textarea {
+    width: 100%;
+    min-height: 180px;
+    padding: 16px;
+    border: 1px solid #E2E8F0;
+    border-radius: 8px;
+    font-family: inherit;
+    font-size: 1rem;
+    resize: vertical;
+    transition: var(--transition);
+    background-color: var(--color-bg-light);
+}
+
+textarea:focus {
+    outline: none;
+    border-color: var(--color-primary);
+    box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.1);
+    background-color: white;
+}
+
+/* 글자 수 표시 */
+.char-count {
+    text-align: right;
+    font-size: 0.8rem;
+    color: var(--color-text-muted);
+    margin-top: 8px;
+}
+
+/* 6. Analyze Button (분석 버튼) */
+#analyze-btn {
+    width: 100%;
+    padding: 16px;
+    background-color: var(--color-primary);
+    color: white;
+    border: none;
+    border-radius: var(--radius-btn);
+    font-size: 1.1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: var(--transition);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 24px;
+}
+
+#analyze-btn:hover {
+    background-color: var(--color-primary-hover);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(124, 58, 237, 0.3);
+}
+
+#analyze-btn:active {
+    transform: translateY(0);
+}
+
+#analyze-btn:disabled {
+    background-color: #CBD5E1;
+    cursor: not-allowed;
+    transform: none;
+}
+
+/* 로딩 스피너 */
+.spinner {
+    width: 20px;
+    height: 20px;
+    border: 3px solid rgba(255, 255, 255, 0.3);
+    border-top-color: white;
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+    margin-right: 10px;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+.hidden {
+    display: none !important;
+}
+
+/* 7. Result Modal (분석 결과 모달) */
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-overlay {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: rgba(15, 23, 42, 0.6); /* 네이비 톤 오버레이 */
+    backdrop-filter: blur(4px);
+}
+
+.modal-content {
+    position: relative;
+    background: white;
+    width: 90%;
+    max-width: 500px;
+    padding: 40px;
+    border-radius: 20px;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+    text-align: center;
+    animation: slideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes slideUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* 결과 뱃지 */
+.result-badge {
+    display: inline-block;
+    padding: 8px 20px;
+    border-radius: 50px;
+    font-weight: 700;
+    font-size: 1.2rem;
+    margin-bottom: 20px;
+}
+
+.badge-positive { background-color: #DCFCE7; color: #15803D; }
+.badge-negative { background-color: #FEE2E2; color: #B91C1C; }
+.badge-neutral  { background-color: #FEF3C7; color: #92400E; }
+
+/* 신뢰도 게이지 */
+.confidence-container {
+    margin: 24px 0;
+    text-align: left;
+}
+
+.confidence-bar-bg {
+    width: 100%;
+    height: 12px;
+    background-color: #E2E8F0;
+    border-radius: 6px;
+    overflow: hidden;
+    margin-top: 8px;
+}
+
+.confidence-bar-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #7C3AED, #A78BFA);
+    width: 0%; /* JS에서 동적으로 조절 */
+    transition: width 1s ease-out;
+}
+
+/* 분석 이유 박스 */
+.reason-box {
+    background-color: var(--color-pastel-blue);
+    padding: 20px;
+    border-radius: 12px;
+    text-align: left;
+    margin-top: 24px;
+    border-left: 4px solid var(--color-primary);
+}
+
+#close-modal-btn {
+    margin-top: 32px;
+    width: 100%;
+    padding: 12px;
+    border: none;
+    background-color: var(--color-text-main);
+    color: white;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+/* 8. 반응형 레이아웃 */
+@media (max-width: 640px) {
+    .hero h1 { font-size: 2rem; }
+    .hero p { font-size: 1rem; }
+    .container { margin-top: -20px; }
+    .input-card { padding: 20px; }
+}
